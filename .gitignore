@@ -12,7 +12,9 @@ __pycache__/
 # ML Models and Data
 models/
 datasets/processed/
-uploads/
+
+# 特定のファイルを除外
+!uploads/original_filenames.json
 
 # IDE files
 .vscode/

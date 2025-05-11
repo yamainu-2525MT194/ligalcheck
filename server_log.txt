@@ -1,0 +1,124 @@
+ * Serving Flask app 'app'
+ * Debug mode: off
+INFO:werkzeug:[31m[1mWARNING: This is a development server. Do not use it in a production deployment. Use a production WSGI server instead.[0m
+ * Running on http://127.0.0.1:5002
+INFO:werkzeug:[33mPress CTRL+C to quit[0m
+INFO:werkzeug:127.0.0.1 - - [11/May/2025 18:39:27] "GET /ml_trainer HTTP/1.1" 200 -
+INFO:werkzeug:127.0.0.1 - - [11/May/2025 18:39:27] "[33mGET /.well-known/appspecific/com.chrome.devtools.json HTTP/1.1[0m" 404 -
+INFO:werkzeug:127.0.0.1 - - [11/May/2025 18:39:28] "[33mGET /favicon.ico HTTP/1.1[0m" 404 -
+INFO:app:Upload contract route called
+INFO:app:Request method: POST
+INFO:app:Request content type: multipart/form-data; boundary=----WebKitFormBoundarykjC7UwaK6Ve4smsJ
+INFO:app:Request files: ImmutableMultiDict([('contract', <FileStorage: '業務委託契約書_D.docx.pdf' ('application/pdf')>)])
+INFO:app:Request form: ImmutableMultiDict([('risk_level', '低リスク'), ('legal_review', '【業務委託契約書】\r\n■第5条（納品・技術役務の提供）\r\n⇒今回弊社とは準委任契約（役務提供型）となります為、\r\n2項が該当する認識で相違ございませんでしょうか。\r\n■第12条（損害賠償）\r\n甲は、乙が本契約に関し、乙の責に帰すべき事由により個別契約上の\r\n甲又は第三者に損害を与えた場合には、乙に対し損害賠償を請求することができるものとする。\r\n⇒ 以下文言に修正をお願いいたします。\r\n甲及び乙は、本契約に関し、相手方の責めに帰すべき事由により損害を被った場合、\r\n相手方に対して、直接的かつ通常の範囲に限り損害賠償を請求することができるものとする。\r\n■第17条（契約不適合責任）\r\n⇒ 今回弊社とは準委任契約となります為、\r\n第17条は対象外の認識で相違ございませんでしょうか。\r\n■第20条（契約の解除）\r\n1項（１）本契約ないし個別契約の規定に違反し、その違反が重大なとき\r\n⇒ 1項1号につきまして、「重大」とは具体的にどの程度の事象を想定されているか、ご教授いただけますと幸いです。\r\n2項 （２）乙の責めに帰すべき事由により、業務が所定の完工期日までに完成の見込みがないと認められるに至ったとき\r\n⇒ 2項2号につきまして、準委任契約（役務提供型）の際は対象外の認識で相違ございませんでしょうか。'), ('risk_factors', '合意管轄'), ('risk_factors', '["合意管轄"]'), ('notes', '')])
+INFO:app:Received file: 業務委託契約書_D.docx.pdf
+INFO:werkzeug:127.0.0.1 - - [11/May/2025 18:40:06] "POST /upload_contract HTTP/1.1" 200 -
+INFO:werkzeug:127.0.0.1 - - [11/May/2025 18:40:23] "[33mGET /.well-known/appspecific/com.chrome.devtools.json HTTP/1.1[0m" 404 -
+INFO:app:Upload contract route called
+INFO:app:Request method: POST
+INFO:app:Request content type: multipart/form-data; boundary=----WebKitFormBoundaryQhc8XZL3P9YzLst4
+INFO:app:Request files: ImmutableMultiDict([('contract', <FileStorage: '業務委託契約書_D.docx.pdf' ('application/pdf')>)])
+INFO:app:Request form: ImmutableMultiDict([('risk_level', '低リスク'), ('legal_review', '【業務委託契約書】\r\n■第5条（納品・技術役務の提供）\r\n⇒今回弊社とは準委任契約（役務提供型）となります為、\r\n2項が該当する認識で相違ございませんでしょうか。\r\n■第12条（損害賠償）\r\n甲は、乙が本契約に関し、乙の責に帰すべき事由により個別契約上の\r\n甲又は第三者に損害を与えた場合には、乙に対し損害賠償を請求することができるものとする。\r\n⇒ 以下文言に修正をお願いいたします。\r\n甲及び乙は、本契約に関し、相手方の責めに帰すべき事由により損害を被った場合、\r\n相手方に対して、直接的かつ通常の範囲に限り損害賠償を請求することができるものとする。\r\n■第17条（契約不適合責任）\r\n⇒ 今回弊社とは準委任契約となります為、\r\n第17条は対象外の認識で相違ございませんでしょうか。\r\n■第20条（契約の解除）\r\n1項（１）本契約ないし個別契約の規定に違反し、その違反が重大なとき\r\n⇒ 1項1号につきまして、「重大」とは具体的にどの程度の事象を想定されているか、ご教授いただけますと幸いです。\r\n2項 （２）乙の責めに帰すべき事由により、業務が所定の完工期日までに完成の見込みがないと認められるに至ったとき\r\n⇒ 2項2号につきまして、準委任契約（役務提供型）の際は対象外の認識で相違ございませんでしょうか。'), ('risk_factors', '合意管轄'), ('risk_factors', '["合意管轄"]'), ('notes', '')])
+INFO:app:Received file: 業務委託契約書_D.docx.pdf
+INFO:werkzeug:127.0.0.1 - - [11/May/2025 18:50:22] "POST /upload_contract HTTP/1.1" 200 -
+INFO:app:Upload contract route called
+INFO:app:Request method: POST
+INFO:app:Request content type: multipart/form-data; boundary=----WebKitFormBoundarys9wCKlMOurqeDC42
+INFO:app:Request files: ImmutableMultiDict([('contract', <FileStorage: '基）基本契約書_E.docx.pdf' ('application/pdf')>)])
+INFO:app:Request form: ImmutableMultiDict([('risk_level', '低リスク'), ('legal_review', '・第\u300010\u3000条\u3000(賠償責任)\r\n\u3000次の各号においては、甲又は乙はその被った損害の賠償を請求することができる。\r\n\u3000(1)    甲又は乙又は乙の関係者の故意又は過失により本件委託業務の処理を誤り、相手方の業務運営に支障をきたしたとき。\r\n\u3000(2)    甲又は乙又は乙の関係者の故意又は過失により相手方の機器等（ソフト・システムを含む）を破損したとき。\r\n\u3000(3)    甲又は乙が正当な理由なくして本契約の履行を怠ったとき。\r\n\r\n\u3000→以下の文言に修正をお願いします。\r\n\u3000次の各号においては、甲又は乙はその被った損害の賠償を業務委託料を上限に請求することができる。\r\n\r\n・第\u300015\u3000条\u3000(保証期間)\r\n\r\n\u3000→弊社としては貴社と請負契約を締結する事はないと考えております故、\r\n\u3000\u3000お手数ですが請負内容は削除をお願いいたします。'), ('risk_factors', '合意管轄'), ('risk_factors', '["合意管轄"]'), ('notes', '')])
+INFO:app:Received file: 基）基本契約書_E.docx.pdf
+INFO:werkzeug:127.0.0.1 - - [11/May/2025 19:11:27] "POST /upload_contract HTTP/1.1" 200 -
+INFO:app:Upload contract route called
+INFO:app:Request method: POST
+INFO:app:Request content type: multipart/form-data; boundary=----WebKitFormBoundaryF7bteRFWcKDHMGyC
+INFO:app:Request files: ImmutableMultiDict([('contract', <FileStorage: '業務委託基本契約書_F.pdf' ('application/pdf')>)])
+INFO:app:Request form: ImmutableMultiDict([('risk_level', '低リスク'), ('legal_review', '■業務委託基本契約書\r\n第15条 （損害賠償）\r\n1. 甲または乙（第13条の再委託先を含む）は本契約および個別契約に定める条項に違反\r\nすることにより相手方に損害を与えた場合、その損害を賠償する責を負う。\r\n→以下の文言に修正をお願いします。\r\n\r\n1. 甲または乙（第13条の再委託先を含む）は本契約および個別契約に定める条項に違反\r\nすることにより相手方に損害を与えた場合、その損害を業務委託料を上限に賠償する責を負う。'), ('risk_factors', '合意管轄'), ('risk_factors', '["合意管轄"]'), ('notes', '')])
+INFO:app:Received file: 業務委託基本契約書_F.pdf
+INFO:werkzeug:127.0.0.1 - - [11/May/2025 19:14:40] "POST /upload_contract HTTP/1.1" 200 -
+INFO:werkzeug:127.0.0.1 - - [11/May/2025 19:14:45] "POST /train_model HTTP/1.1" 200 -
+INFO:werkzeug:127.0.0.1 - - [11/May/2025 19:14:52] "GET /ml_trainer HTTP/1.1" 200 -
+INFO:app:Upload contract route called
+INFO:app:Request method: POST
+INFO:app:Request content type: multipart/form-data; boundary=----WebKitFormBoundaryeqyZ923AY49bCMpW
+INFO:app:Request files: ImmutableMultiDict([('contract', <FileStorage: '基本契約書_G.pdf' ('application/pdf')>)])
+INFO:app:Request form: ImmutableMultiDict([('risk_level', '低リスク'), ('legal_review', '（損害賠償）\r\n第１８条\r\n乙及び乙の従業員が本件業務の遂行にあたり、乙または乙の従業員の故意または過失により、甲または甲の顧客や第三者に損害を及ぼしたときは、乙はその損害を賠償するものとする。なお、本条にいう損害には、乙の行為によって被った被害を立証するために要した費用、訴訟費用、弁護費用等の費用も含まれるものとする。\r\n\r\n→以下の文言に修正をお願いいたします。\r\n\r\n（損害賠償）\r\n第１８条\r\n乙及び乙の従業員が本件業務の遂行にあたり、乙または乙の従業員の故意または過失により、甲または甲の顧客や第三者に損害を及ぼしたときは、乙はその損害を業務委託料を上限に賠償するものとする。なお、本条にいう損害には、乙の行為によって被った被害を立証するために要した費用、訴訟費用、弁護費用等の費用も含まれるものとする。'), ('notes', ''), ('risk_factors', '[]')])
+INFO:app:Received file: 基本契約書_G.pdf
+INFO:werkzeug:127.0.0.1 - - [11/May/2025 19:31:24] "POST /upload_contract HTTP/1.1" 200 -
+INFO:werkzeug:127.0.0.1 - - [11/May/2025 19:31:51] "[33mGET /.well-known/appspecific/com.chrome.devtools.json HTTP/1.1[0m" 404 -
+INFO:werkzeug:127.0.0.1 - - [11/May/2025 19:35:19] "POST /train_model HTTP/1.1" 200 -
+INFO:werkzeug:127.0.0.1 - - [11/May/2025 19:37:59] "GET / HTTP/1.1" 200 -
+/Users/yamamotoyuuki/.pyenv/versions/3.10.5/lib/python3.10/site-packages/huggingface_hub/file_download.py:943: FutureWarning: `resume_download` is deprecated and will be removed in version 1.0.0. Downloads always resume when possible. If you want to force a new download, use `force_download=True`.
+  warnings.warn(
+Some weights of the model checkpoint at cl-tohoku/bert-base-japanese-whole-word-masking were not used when initializing BertForSequenceClassification: ['cls.seq_relationship.weight', 'cls.predictions.transform.LayerNorm.bias', 'cls.predictions.transform.LayerNorm.weight', 'cls.predictions.decoder.weight', 'cls.predictions.bias', 'cls.predictions.transform.dense.bias', 'cls.seq_relationship.bias', 'cls.predictions.transform.dense.weight']
+- This IS expected if you are initializing BertForSequenceClassification from the checkpoint of a model trained on another task or with another architecture (e.g. initializing a BertForSequenceClassification model from a BertForPreTraining model).
+- This IS NOT expected if you are initializing BertForSequenceClassification from the checkpoint of a model that you expect to be exactly identical (initializing a BertForSequenceClassification model from a BertForSequenceClassification model).
+Some weights of BertForSequenceClassification were not initialized from the model checkpoint at cl-tohoku/bert-base-japanese-whole-word-masking and are newly initialized: ['classifier.weight', 'classifier.bias']
+You should probably TRAIN this model on a down-stream task to be able to use it for predictions and inference.
+INFO:werkzeug:127.0.0.1 - - [11/May/2025 19:38:13] "[35m[1mPOST /upload HTTP/1.1[0m" 500 -
+INFO:werkzeug:127.0.0.1 - - [11/May/2025 19:39:01] "[33mGET /.well-known/appspecific/com.chrome.devtools.json HTTP/1.1[0m" 404 -
+Some weights of the model checkpoint at cl-tohoku/bert-base-japanese-whole-word-masking were not used when initializing BertForSequenceClassification: ['cls.seq_relationship.weight', 'cls.predictions.transform.LayerNorm.bias', 'cls.predictions.transform.LayerNorm.weight', 'cls.predictions.decoder.weight', 'cls.predictions.bias', 'cls.predictions.transform.dense.bias', 'cls.seq_relationship.bias', 'cls.predictions.transform.dense.weight']
+- This IS expected if you are initializing BertForSequenceClassification from the checkpoint of a model trained on another task or with another architecture (e.g. initializing a BertForSequenceClassification model from a BertForPreTraining model).
+- This IS NOT expected if you are initializing BertForSequenceClassification from the checkpoint of a model that you expect to be exactly identical (initializing a BertForSequenceClassification model from a BertForSequenceClassification model).
+Some weights of BertForSequenceClassification were not initialized from the model checkpoint at cl-tohoku/bert-base-japanese-whole-word-masking and are newly initialized: ['classifier.weight', 'classifier.bias']
+You should probably TRAIN this model on a down-stream task to be able to use it for predictions and inference.
+INFO:werkzeug:127.0.0.1 - - [11/May/2025 19:39:08] "[35m[1mPOST /upload HTTP/1.1[0m" 500 -
+INFO:werkzeug:127.0.0.1 - - [11/May/2025 19:41:14] "GET / HTTP/1.1" 200 -
+INFO:werkzeug:127.0.0.1 - - [11/May/2025 19:41:14] "[33mGET /.well-known/appspecific/com.chrome.devtools.json HTTP/1.1[0m" 404 -
+Some weights of the model checkpoint at cl-tohoku/bert-base-japanese-whole-word-masking were not used when initializing BertForSequenceClassification: ['cls.seq_relationship.weight', 'cls.predictions.transform.LayerNorm.bias', 'cls.predictions.transform.LayerNorm.weight', 'cls.predictions.decoder.weight', 'cls.predictions.bias', 'cls.predictions.transform.dense.bias', 'cls.seq_relationship.bias', 'cls.predictions.transform.dense.weight']
+- This IS expected if you are initializing BertForSequenceClassification from the checkpoint of a model trained on another task or with another architecture (e.g. initializing a BertForSequenceClassification model from a BertForPreTraining model).
+- This IS NOT expected if you are initializing BertForSequenceClassification from the checkpoint of a model that you expect to be exactly identical (initializing a BertForSequenceClassification model from a BertForSequenceClassification model).
+Some weights of BertForSequenceClassification were not initialized from the model checkpoint at cl-tohoku/bert-base-japanese-whole-word-masking and are newly initialized: ['classifier.weight', 'classifier.bias']
+You should probably TRAIN this model on a down-stream task to be able to use it for predictions and inference.
+INFO:werkzeug:127.0.0.1 - - [11/May/2025 19:41:29] "[35m[1mPOST /upload HTTP/1.1[0m" 500 -
+INFO:werkzeug:127.0.0.1 - - [11/May/2025 19:43:27] "GET / HTTP/1.1" 200 -
+INFO:werkzeug:127.0.0.1 - - [11/May/2025 19:43:27] "[33mGET /.well-known/appspecific/com.chrome.devtools.json HTTP/1.1[0m" 404 -
+Some weights of the model checkpoint at cl-tohoku/bert-base-japanese-whole-word-masking were not used when initializing BertForSequenceClassification: ['cls.seq_relationship.weight', 'cls.predictions.transform.LayerNorm.bias', 'cls.predictions.transform.LayerNorm.weight', 'cls.predictions.decoder.weight', 'cls.predictions.bias', 'cls.predictions.transform.dense.bias', 'cls.seq_relationship.bias', 'cls.predictions.transform.dense.weight']
+- This IS expected if you are initializing BertForSequenceClassification from the checkpoint of a model trained on another task or with another architecture (e.g. initializing a BertForSequenceClassification model from a BertForPreTraining model).
+- This IS NOT expected if you are initializing BertForSequenceClassification from the checkpoint of a model that you expect to be exactly identical (initializing a BertForSequenceClassification model from a BertForSequenceClassification model).
+Some weights of BertForSequenceClassification were not initialized from the model checkpoint at cl-tohoku/bert-base-japanese-whole-word-masking and are newly initialized: ['classifier.weight', 'classifier.bias']
+You should probably TRAIN this model on a down-stream task to be able to use it for predictions and inference.
+INFO:werkzeug:127.0.0.1 - - [11/May/2025 19:43:39] "[35m[1mPOST /upload HTTP/1.1[0m" 500 -
+INFO:werkzeug:127.0.0.1 - - [11/May/2025 19:45:15] "GET / HTTP/1.1" 200 -
+INFO:werkzeug:127.0.0.1 - - [11/May/2025 19:45:15] "[33mGET /.well-known/appspecific/com.chrome.devtools.json HTTP/1.1[0m" 404 -
+Some weights of the model checkpoint at cl-tohoku/bert-base-japanese-whole-word-masking were not used when initializing BertForSequenceClassification: ['cls.seq_relationship.weight', 'cls.predictions.transform.LayerNorm.bias', 'cls.predictions.transform.LayerNorm.weight', 'cls.predictions.decoder.weight', 'cls.predictions.bias', 'cls.predictions.transform.dense.bias', 'cls.seq_relationship.bias', 'cls.predictions.transform.dense.weight']
+- This IS expected if you are initializing BertForSequenceClassification from the checkpoint of a model trained on another task or with another architecture (e.g. initializing a BertForSequenceClassification model from a BertForPreTraining model).
+- This IS NOT expected if you are initializing BertForSequenceClassification from the checkpoint of a model that you expect to be exactly identical (initializing a BertForSequenceClassification model from a BertForSequenceClassification model).
+Some weights of BertForSequenceClassification were not initialized from the model checkpoint at cl-tohoku/bert-base-japanese-whole-word-masking and are newly initialized: ['classifier.weight', 'classifier.bias']
+You should probably TRAIN this model on a down-stream task to be able to use it for predictions and inference.
+INFO:werkzeug:127.0.0.1 - - [11/May/2025 19:45:29] "[35m[1mPOST /upload HTTP/1.1[0m" 500 -
+INFO:werkzeug:127.0.0.1 - - [11/May/2025 19:47:55] "GET / HTTP/1.1" 200 -
+INFO:werkzeug:127.0.0.1 - - [11/May/2025 19:47:55] "[33mGET /.well-known/appspecific/com.chrome.devtools.json HTTP/1.1[0m" 404 -
+Some weights of the model checkpoint at cl-tohoku/bert-base-japanese-whole-word-masking were not used when initializing BertForSequenceClassification: ['cls.seq_relationship.weight', 'cls.predictions.transform.LayerNorm.bias', 'cls.predictions.transform.LayerNorm.weight', 'cls.predictions.decoder.weight', 'cls.predictions.bias', 'cls.predictions.transform.dense.bias', 'cls.seq_relationship.bias', 'cls.predictions.transform.dense.weight']
+- This IS expected if you are initializing BertForSequenceClassification from the checkpoint of a model trained on another task or with another architecture (e.g. initializing a BertForSequenceClassification model from a BertForPreTraining model).
+- This IS NOT expected if you are initializing BertForSequenceClassification from the checkpoint of a model that you expect to be exactly identical (initializing a BertForSequenceClassification model from a BertForSequenceClassification model).
+Some weights of BertForSequenceClassification were not initialized from the model checkpoint at cl-tohoku/bert-base-japanese-whole-word-masking and are newly initialized: ['classifier.weight', 'classifier.bias']
+You should probably TRAIN this model on a down-stream task to be able to use it for predictions and inference.
+INFO:werkzeug:127.0.0.1 - - [11/May/2025 19:48:13] "[35m[1mPOST /upload HTTP/1.1[0m" 500 -
+INFO:werkzeug:127.0.0.1 - - [11/May/2025 19:50:09] "GET / HTTP/1.1" 200 -
+INFO:werkzeug:127.0.0.1 - - [11/May/2025 19:50:09] "[33mGET /.well-known/appspecific/com.chrome.devtools.json HTTP/1.1[0m" 404 -
+Some weights of the model checkpoint at cl-tohoku/bert-base-japanese-whole-word-masking were not used when initializing BertForSequenceClassification: ['cls.seq_relationship.weight', 'cls.predictions.transform.LayerNorm.bias', 'cls.predictions.transform.LayerNorm.weight', 'cls.predictions.decoder.weight', 'cls.predictions.bias', 'cls.predictions.transform.dense.bias', 'cls.seq_relationship.bias', 'cls.predictions.transform.dense.weight']
+- This IS expected if you are initializing BertForSequenceClassification from the checkpoint of a model trained on another task or with another architecture (e.g. initializing a BertForSequenceClassification model from a BertForPreTraining model).
+- This IS NOT expected if you are initializing BertForSequenceClassification from the checkpoint of a model that you expect to be exactly identical (initializing a BertForSequenceClassification model from a BertForSequenceClassification model).
+Some weights of BertForSequenceClassification were not initialized from the model checkpoint at cl-tohoku/bert-base-japanese-whole-word-masking and are newly initialized: ['classifier.weight', 'classifier.bias']
+You should probably TRAIN this model on a down-stream task to be able to use it for predictions and inference.
+INFO:werkzeug:127.0.0.1 - - [11/May/2025 19:50:22] "[35m[1mPOST /upload HTTP/1.1[0m" 500 -
+INFO:werkzeug:127.0.0.1 - - [11/May/2025 19:51:50] "GET / HTTP/1.1" 200 -
+INFO:werkzeug:127.0.0.1 - - [11/May/2025 19:51:50] "[33mGET /.well-known/appspecific/com.chrome.devtools.json HTTP/1.1[0m" 404 -
+Some weights of the model checkpoint at cl-tohoku/bert-base-japanese-whole-word-masking were not used when initializing BertForSequenceClassification: ['cls.seq_relationship.weight', 'cls.predictions.transform.LayerNorm.bias', 'cls.predictions.transform.LayerNorm.weight', 'cls.predictions.decoder.weight', 'cls.predictions.bias', 'cls.predictions.transform.dense.bias', 'cls.seq_relationship.bias', 'cls.predictions.transform.dense.weight']
+- This IS expected if you are initializing BertForSequenceClassification from the checkpoint of a model trained on another task or with another architecture (e.g. initializing a BertForSequenceClassification model from a BertForPreTraining model).
+- This IS NOT expected if you are initializing BertForSequenceClassification from the checkpoint of a model that you expect to be exactly identical (initializing a BertForSequenceClassification model from a BertForSequenceClassification model).
+Some weights of BertForSequenceClassification were not initialized from the model checkpoint at cl-tohoku/bert-base-japanese-whole-word-masking and are newly initialized: ['classifier.weight', 'classifier.bias']
+You should probably TRAIN this model on a down-stream task to be able to use it for predictions and inference.
+INFO:werkzeug:127.0.0.1 - - [11/May/2025 19:52:02] "[35m[1mPOST /upload HTTP/1.1[0m" 500 -
+INFO:werkzeug:127.0.0.1 - - [11/May/2025 19:56:35] "GET / HTTP/1.1" 200 -
+INFO:werkzeug:127.0.0.1 - - [11/May/2025 19:56:35] "[33mGET /.well-known/appspecific/com.chrome.devtools.json HTTP/1.1[0m" 404 -
+INFO:werkzeug:127.0.0.1 - - [11/May/2025 19:56:42] "GET / HTTP/1.1" 200 -
+INFO:werkzeug:127.0.0.1 - - [11/May/2025 19:56:42] "[33mGET /.well-known/appspecific/com.chrome.devtools.json HTTP/1.1[0m" 404 -
+Some weights of the model checkpoint at cl-tohoku/bert-base-japanese-whole-word-masking were not used when initializing BertForSequenceClassification: ['cls.seq_relationship.weight', 'cls.predictions.transform.LayerNorm.bias', 'cls.predictions.transform.LayerNorm.weight', 'cls.predictions.decoder.weight', 'cls.predictions.bias', 'cls.predictions.transform.dense.bias', 'cls.seq_relationship.bias', 'cls.predictions.transform.dense.weight']
+- This IS expected if you are initializing BertForSequenceClassification from the checkpoint of a model trained on another task or with another architecture (e.g. initializing a BertForSequenceClassification model from a BertForPreTraining model).
+- This IS NOT expected if you are initializing BertForSequenceClassification from the checkpoint of a model that you expect to be exactly identical (initializing a BertForSequenceClassification model from a BertForSequenceClassification model).
+Some weights of BertForSequenceClassification were not initialized from the model checkpoint at cl-tohoku/bert-base-japanese-whole-word-masking and are newly initialized: ['classifier.weight', 'classifier.bias']
+You should probably TRAIN this model on a down-stream task to be able to use it for predictions and inference.
+INFO:werkzeug:127.0.0.1 - - [11/May/2025 19:56:54] "[35m[1mPOST /upload HTTP/1.1[0m" 500 -
+INFO:werkzeug:127.0.0.1 - - [11/May/2025 19:57:55] "GET / HTTP/1.1" 200 -
+INFO:werkzeug:127.0.0.1 - - [11/May/2025 19:57:55] "[33mGET /.well-known/appspecific/com.chrome.devtools.json HTTP/1.1[0m" 404 -
