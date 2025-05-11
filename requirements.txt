@@ -1,0 +1,13 @@
+flask==2.3.2
+flask-cors==3.0.10
+python-dotenv==1.0.0
+openai==0.27.7
+PyPDF2==3.0.1
+langchain==0.0.220
+nltk==3.8.1
+scikit-learn==1.2.2
+pandas==2.0.1
+joblib==1.2.0
+numpy==1.24.3
+xlrd==2.0.1  # Excelファイルサポート
+openpyxl==3.1.2  # Excelファイルサポート

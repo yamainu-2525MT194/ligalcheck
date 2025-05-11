@@ -1,0 +1,175 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <title>機械学習トレーニングプラットフォーム</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.2.3/dist/css/bootstrap.min.css" rel="stylesheet">
+    <style>
+        body { font-family: Arial, sans-serif; }
+        body { padding-top: 50px; }
+        .ml-section { margin-bottom: 30px; }
+        #trainingProgress { display: none; }
+        #modelEvaluation pre { background-color: #f4f4f4; padding: 15px; border-radius: 5px; }
+    </style>
+</head>
+<body>
+    <nav class="navbar navbar-expand-lg navbar-light bg-light mb-4">
+        <div class="container">
+            <a class="navbar-brand" href="/">契約書リーガルチェック</a>
+            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+            <div class="collapse navbar-collapse" id="navbarNav">
+                <ul class="navbar-nav">
+                    <li class="nav-item">
+                        <a class="nav-link" href="/">契約書分析</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link active" href="/ml_trainer">機械学習トレーニング</a>
+                    </li>
+                </ul>
+            </div>
+        </div>
+    </nav>
+    <div class="container">
+        <h1 class="text-center mb-4">機械学習トレーニングプラットフォーム</h1>
+        
+        <div class="row">
+            <div class="col-md-6 ml-section">
+                <div class="card">
+                    <div class="card-header">データアップロード</div>
+                    <div class="card-body">
+                        <input type="file" id="datasetUpload" accept=".csv,.json,.xlsx" multiple class="form-control mb-3">
+                        <button onclick="uploadDataset()" class="btn btn-primary">データをアップロード</button>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="col-md-6 ml-section">
+                <div class="card">
+                    <div class="card-header">モデル設定</div>
+                    <div class="card-body">
+                        <select id="modelType" class="form-select mb-3">
+                            <option value="random_forest">ランダムフォレスト</option>
+                            <option value="svm">サポートベクターマシン</option>
+                            <option value="neural_network">ニューラルネットワーク</option>
+                        </select>
+                        <div class="mb-3">
+                            <label class="form-label">トレーニングパラメータ</label>
+                            <input type="number" id="maxDepth" class="form-control" placeholder="最大深度" min="1" max="50">
+                        </div>
+                        <button onclick="configureModel()" class="btn btn-success">モデル設定</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+        
+        <div class="row">
+            <div class="col-12 ml-section">
+                <div class="card">
+                    <div class="card-header">モデルトレーニング</div>
+                    <div class="card-body">
+                        <div class="progress" id="trainingProgress">
+                            <div class="progress-bar progress-bar-striped active" role="progressbar" style="width: 0%">
+                                トレーニング中...
+                            </div>
+                        </div>
+                        <button onclick="startTraining()" class="btn btn-danger">トレーニング開始</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+        
+        <div class="row">
+            <div class="col-12 ml-section">
+                <div class="card">
+                    <div class="card-header">モデル評価</div>
+                    <div class="card-body">
+                        <div id="modelEvaluation"></div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        function uploadDataset() {
+            const fileInput = document.getElementById('datasetUpload');
+            const files = fileInput.files;
+            
+            if (files.length === 0) {
+                alert('ファイルを選択してください');
+                return;
+            }
+
+            const formData = new FormData();
+            for (let file of files) {
+                formData.append('datasets', file);
+            }
+
+            fetch('/upload_dataset', {
+                method: 'POST',
+                body: formData
+            })
+            .then(response => response.json())
+            .then(data => {
+                if (data.success) {
+                    alert('データのアップロードに成功しました');
+                } else {
+                    alert('データのアップロードに失敗しました');
+                }
+            });
+        }
+
+        function configureModel() {
+            const modelType = document.getElementById('modelType').value;
+            const maxDepth = document.getElementById('maxDepth').value;
+
+            fetch('/configure_model', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify({
+                    model_type: modelType,
+                    max_depth: maxDepth
+                })
+            })
+            .then(response => response.json())
+            .then(data => {
+                if (data.success) {
+                    alert('モデル設定が完了しました');
+                } else {
+                    alert('モデル設定に失敗しました');
+                }
+            });
+        }
+
+        function startTraining() {
+            const trainingProgress = document.getElementById('trainingProgress');
+            trainingProgress.style.display = 'block';
+
+            fetch('/start_training', {
+                method: 'POST'
+            })
+            .then(response => response.json())
+            .then(data => {
+                trainingProgress.style.display = 'none';
+                const evalDiv = document.getElementById('modelEvaluation');
+                
+                if (data.success) {
+                    evalDiv.innerHTML = `
+                        <h4>モデル評価結果</h4>
+                        <pre>${JSON.stringify(data.evaluation, null, 2)}</pre>
+                    `;
+                } else {
+                    evalDiv.innerHTML = '<p class="text-danger">トレーニングに失敗しました</p>';
+                }
+            });
+        }
+    </script>
+    <script>
+        // 既存のスクリプトコードをここに維持
+    </script>
+</body>
+</html>

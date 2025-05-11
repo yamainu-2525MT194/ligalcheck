@@ -1,0 +1,28 @@
+# Python
+venv/
+*.pyc
+__pycache__/
+*.pyo
+*.pyd
+
+# Environment files
+.env
+*.env
+
+# ML Models and Data
+models/
+datasets/processed/
+uploads/
+
+# IDE files
+.vscode/
+.idea/
+
+# MacOS
+.DS_Store
+
+# Logs
+*.log
+
+# Jupyter Notebook
+.ipynb_checkpoints/
