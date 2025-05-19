@@ -64,7 +64,7 @@
 
             resultDiv.textContent = '分析中...';
 
-            fetch('/upload', {
+            fetch('http://127.0.0.1:5010/upload', {
                 method: 'POST',
                 body: formData
             })
