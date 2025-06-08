@@ -96,10 +96,8 @@ class ContractLegalAnalyzer:
 
 def main():
     analyzer = ContractLegalAnalyzer()
-    
-    # Uncomment these when you have data
-    # analyzer.prepare_training_data()
-    # analyzer.train_model()
+    analyzer.prepare_training_data()
+    analyzer.train_model()
 
 if __name__ == '__main__':
     main()

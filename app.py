@@ -23,6 +23,8 @@ from asgiref.wsgi import WsgiToAsgi
 import asyncio
 from dotenv import load_dotenv
 from japanese_contract_analyzer import JapaneseContractAnalyzer
+from custom_t5_analyzer import CustomT5ContractAnalyzer
+from hybrid_contract_analyzer import HybridContractAnalyzer
 from sklearn.model_selection import train_test_split
 from sklearn.ensemble import RandomForestClassifier, GradientBoostingClassifier
 from sklearn.svm import SVC
@@ -165,7 +167,7 @@ app.logger.setLevel(logging.DEBUG)
 
 # ファイルアップロードのセキュリティチェック
 def allowed_file(filename):
-    ALLOWED_EXTENSIONS = {'pdf', 'csv', 'xlsx'}
+    ALLOWED_EXTENSIONS = {'pdf', 'docx', 'csv', 'xlsx'}
     return '.' in filename and filename.rsplit('.', 1)[1].lower() in ALLOWED_EXTENSIONS
 
 def validate_file_size(file):
@@ -351,6 +353,32 @@ def extract_text_from_pdf(file_path):
         app.logger.error(f'Error extracting text from PDF: {str(e)}')
         app.logger.error(traceback.format_exc())
         raise
+
+def extract_text_from_docx(file_path):
+    """DOCXファイルからテキストを抽出する（python-docx使用）"""
+    try:
+        import docx
+        doc = docx.Document(file_path)
+        text = ''
+        for para in doc.paragraphs:
+            if para.text:
+                text += para.text + '\n'
+        return text.strip()
+    except Exception as e:
+        app.logger.error(f'Error extracting text from DOCX: {str(e)}')
+        app.logger.error(traceback.format_exc())
+        raise
+
+def extract_text_from_file(file_path):
+    """ファイル拡張子に基づいて適切なテキスト抽出メソッドを選択する"""
+    file_extension = os.path.splitext(file_path)[1].lower()
+    if file_extension == '.pdf':
+        return extract_text_from_pdf(file_path)
+    elif file_extension == '.docx':
+        return extract_text_from_docx(file_path)
+    else:
+        raise ValueError(f'Unsupported file type: {file_extension}')
+
 
 def analyze_contract(pdf_file):
     # 日本語契約書分析モジュールを使用
@@ -560,69 +588,182 @@ def handle_contract_upload(request):
 @async_route
 async def upload_contract():
     print("[DEBUG] Start upload_contract")
-    app.logger.info("Entered upload_contract") # Add this line
+    app.logger.info("Entered upload_contract") 
     """非同期で契約書をアップロードして分析するエンドポイント"""
     if 'file' not in request.files:
         print("[DEBUG] No file in request.files")
         raise APIError("ファイルがアップロードされていません", 400)
     
     file = request.files['file']
-    print(f"[DEBUG] Uploaded filename: {file.filename}")
-    if not file or file.filename == '':
-        print("[DEBUG] No filename or file is empty")
-        raise APIError("ファイルが選択されていません", 400)
+    if file.filename == '':
+        raise APIError("ファイル名が空です", 400)
     
+    # モデルタイプの取得
+    model_id = request.form.get('model_id', 'standard')  # デフォルトは標準モデル
+    app.logger.info(f"Selected model_id: {model_id}")
+    
+    # ファイル拡張子のチェック
     if not allowed_file(file.filename):
-        raise APIError("許可されていないファイル形式です。PDFファイルをアップロードしてください。", 400)
+        raise APIError("許可されていないファイル形式です。PDFまたはWord文書をアップロードしてください。", 400)
     
+    # ファイルサイズのチェック
+    file_size = validate_file_size(file)
+    
+    # 安全なファイル名の生成
+    filename = secure_filename(file.filename)
+    
+    # ファイルの保存先パスの生成
+    file_path = os.path.join(app.config['UPLOAD_FOLDER'], filename)
+    
+    # ファイルの保存
     try:
-        # ファイルのバリデーション
-        validate_file_size(file)
-        
-        # 一時ファイルとして保存
-        filename = secure_filename(file.filename)
-        filepath = os.path.join(app.config['UPLOAD_FOLDER'], filename)
-        os.makedirs(os.path.dirname(filepath), exist_ok=True)
-        file.save(filepath)
-        
-        # キャッシュキーの生成（ファイルのハッシュ値を使用）
-        file_hash = hashlib.md5(open(filepath, 'rb').read()).hexdigest()
-        cache_key = f"contract_analysis_{file_hash}"
-        
-        # キャッシュから結果を取得、または分析を実行
-        result = cache.get(cache_key)
-        if result is None:
-            # テキスト抽出
-            text = extract_text_from_pdf(filepath)
-            if not text.strip():
-                raise APIError("PDFからテキストを抽出できませんでした。別のファイルをお試しください。", 400)
+        file.save(file_path)
+    except Exception as e:
+        app.logger.error(f"Failed to save file: {str(e)}")
+        raise APIError(f"ファイルの保存に失敗しました: {str(e)}", 500)
+    
+    # ファイルからテキストを抽出
+    try:
+        contract_text = extract_text_from_file(file_path)
+    except Exception as e:
+        app.logger.error(f"Failed to extract text from file: {str(e)}")
+        # ファイルの削除
+        if os.path.exists(file_path):
+            os.remove(file_path)
+        raise APIError(f"ファイルからのテキスト抽出に失敗しました: {str(e)}", 500)
+    
+    # ファイル内容が空でないかチェック
+    if not contract_text.strip():
+        # ファイルの削除
+        if os.path.exists(file_path):
+            os.remove(file_path)
+        raise APIError("ファイルにテキストコンテンツが含まれていません", 400)
+    
+    # モデルに応じた分析処理
+    try:
+        if model_id == 'custom_t5':
+            # T5モデルを使用した分析
+            analyzer = CustomT5ContractAnalyzer()
+            result = analyzer.analyze_contract(contract_text)
+            app.logger.info(f"T5 analysis result keys: {result.keys() if isinstance(result, dict) else 'not a dict'}")
             
-            # 非同期で分析を実行
+            # T5モデル用のレスポンス形式に変換
+            response_data = {
+                'success': True,
+                'filename': filename,
+                'file_size': file_size,
+                'model_type': 'custom_t5',
+                'raw_data_content': result.get('raw_t5_response', ''),  # 元データとして生のT5出力を使用
+                'risk_level': result.get('risk_info', {}).get('risk_level', 0) + 1,  # 0->1, 1->2, 2->3 に変換
+                'risk_score': result.get('risk_info', {}).get('risk_score', 0.0),
+                'explanation': result.get('risk_info', {}).get('explanation', ''),
+                'problems': result.get('analysis', {}).get('problems', []),
+                'risks': result.get('analysis', {}).get('risks', []),
+                'suggestions': result.get('analysis', {}).get('suggestions', []),
+                'summary': result.get('analysis', {}).get('summary', '')
+            }
+        elif model_id == 'hybrid':
+            # ハイブリッドアナライザーを使用した分析
+            analyzer = HybridContractAnalyzer()
+            result = analyzer.analyze_contract(contract_text)
+            app.logger.info(f"Hybrid analysis result keys: {result.keys() if isinstance(result, dict) else 'not a dict'}")
+            
+            # リスクレベルの値を調整（0,1,2 -> 1,2,3）
+            risk_level_from_analyzer = result.get('risk_level')
+            display_risk_level = None
+            if risk_level_from_analyzer is not None:
+                display_risk_level = risk_level_from_analyzer + 1  # 0->1, 1->2, 2->3 に変換
+            
+            # ハイブリッドモデル用のレスポンス形式
+            response_data = {
+                'success': True,
+                'filename': filename,
+                'file_size': file_size,
+                'model_type': 'hybrid',
+                'model_id': 'hybrid',  # テストが期待するmodel_idキーを追加
+                'raw_data_content': result.get('raw_openai_response', ''),
+                'risk_level': display_risk_level,
+                'risk_score': result.get('risk_score'),
+                'explanation': result.get('explanation', ''),
+                'problems': result.get('problems', []),
+                'risks': result.get('risks', []),
+                'suggestions': result.get('suggestions', []),
+                'summary': result.get('summary', ''),
+                # テストの期待に合わせるために analysis キーを追加
+                'analysis': {
+                    'problems': result.get('problems', []),
+                    'risks': result.get('risks', []),
+                    'suggestions': result.get('suggestions', []),
+                    'summary': result.get('summary', '')
+                }
+            }
+        else:
+            # 標準のJapaneseContractAnalyzerを使用
             analyzer = JapaneseContractAnalyzer()
-            # 非同期関数を実行
-            result = await analyzer.analyze_contract_async(text)
+            result = await analyzer.analyze_contract_async(contract_text)
+            app.logger.info(f"Standard analysis result keys: {result.keys() if isinstance(result, dict) else 'not a dict'}")
             
-            # 結果をシリアライズ可能な形式に変換
-            serializable_result = {
-                'risk_level': result.get('risk_level'),
-                'risk_score': float(result.get('risk_score', 0.0)),  # numpy.float32 を float に変換
-                'explanation': result.get('explanation', '')
+            # リスクレベルの値を調整（0,1,2 -> 1,2,3）
+            risk_level_from_analyzer = result.get('risk_level')
+            display_risk_level = None
+            if risk_level_from_analyzer is not None:
+                display_risk_level = risk_level_from_analyzer + 1  # 0->1, 1->2, 2->3 に変換
+            
+            # 標準モデル用のレスポンス形式
+            response_data = {
+                'success': True,
+                'filename': filename,
+                'file_size': file_size,
+                'model_type': 'standard',
+                'raw_data_content': result.get('raw_openai_response', ''),
+                'risk_level': display_risk_level,
+                'risk_score': result.get('risk_score'),
+                'explanation': result.get('explanation', ''),
+                'problems': result.get('problems', []),
+                'risks': result.get('risks', []),
+                'suggestions': result.get('suggestions', []),
+                'summary': result.get('summary', '')
             }
             
-            # 結果をキャッシュ（5分間有効）
-            cache.set(cache_key, serializable_result, timeout=300)
-            result = serializable_result
+            # 古い'analysis'フィールドもレスポンスに含める（互換性のため）
+            response_data['analysis'] = result.get('legal_check_result', '')
         
+        # エラー処理 - 両方のモデルで共通
+        if result.get('error_message_from_analyzer') or result.get('error', False):
+            response_data['success'] = False
+            error_message = result.get('error_message_from_analyzer', result.get('error_message', 'Unknown error during analysis'))
+            response_data['error'] = error_message
+            
+            # 説明がない場合はエラーメッセージを設定
+            if not response_data.get('explanation'):
+                response_data['explanation'] = f"分析処理中にエラーが発生しました: {error_message}"
+        
+        return jsonify(response_data)
+        
+    except APIError as e: # Catch specific APIError first
+        app.logger.error(f"APIError in upload_contract: {str(e)}\n{traceback.format_exc()}")
         return jsonify({
-            'status': 'success',
-            'message': '契約書の分析が完了しました',
-            'data': result
-        })
-        
+            'filename': file.filename if file else 'N/A',
+            'analysis': f"処理エラー: {str(e)}",
+            'risk_level': None,
+            'risk_score': 0.0,
+            'explanation': str(e),
+            'raw_data_content': f"クライアントエラー: {str(e)}\n{traceback.format_exc()}",
+            'summary': str(e), 'problems': [], 'risks': [], 'suggestions': [],
+            'error': str(e)
+        }), e.status_code
     except Exception as e:
-        app.logger.error(f"契約書の分析中にエラーが発生しました: {str(e)}")
-        app.logger.error(traceback.format_exc())
-        raise APIError("契約書の分析中にエラーが発生しました", 500)
+        app.logger.error(f"契約書の分析中に予期せぬエラーが発生しました: {str(e)}\n{traceback.format_exc()}")
+        return jsonify({
+            'filename': file.filename if file else 'N/A',
+            'analysis': f"サーバー内部エラーが発生しました。", # Generic message for old 'analysis' field
+            'risk_level': None,
+            'risk_score': 0.0,
+            'explanation': "サーバーで予期せぬエラーが発生しました。管理者に連絡してください。",
+            'raw_data_content': f"サーバー内部エラー: {str(e)}\n{traceback.format_exc()}",
+            'summary': "サーバーエラー", 'problems': [], 'risks': [], 'suggestions': [],
+            'error': "サーバー内部エラー"
+        }), 500
 
 @app.route('/ml_trainer', methods=['GET', 'POST'])
 @handle_errors
@@ -765,6 +906,164 @@ def start_training():
         })
     except Exception as e:
         return jsonify({'success': False, 'message': str(e)})
+
+@app.route('/api/analyze_contract_with_t5', methods=['POST'])
+@handle_errors
+def analyze_contract_with_t5():
+    """カスタムT5モデルで契約書テキストを分析する"""
+    try:
+        contract_text = request.json.get('contract_text', '')
+        
+        if not contract_text:
+            return jsonify({
+                'success': False,
+                'error': '契約書テキストが提供されていません'
+            }), 400
+        
+        # カスタムT5アナライザーを初期化
+        analyzer = CustomT5ContractAnalyzer()
+        result = analyzer.analyze_contract(contract_text)
+        
+        # フロントエンド用に結果を整形
+        return jsonify({
+            'success': True,
+            'risk_level': result.get('risk_level', 0),
+            'raw_data_content': result.get('raw_output', ''),
+            'problems': result.get('problems', []),
+            'risks': result.get('risks', []),
+            'summary': result.get('summary', ''),
+            'suggestions': result.get('suggestions', [])
+        })
+    
+    except Exception as e:
+        app.logger.error(f"T5分析中にエラーが発生: {str(e)}", exc_info=True)
+        return jsonify({
+            'success': False,
+            'error': f"分析中にエラーが発生: {str(e)}"
+        }), 500
+
+@app.route('/api/analyze_contract', methods=['POST'])
+@handle_errors
+def analyze_contract_api():
+    """標準モデル（OpenAI）またはハイブリッドモデルで契約書テキストを分析する"""
+    try:
+        contract_text = request.json.get('contract_text', '')
+        model_id = request.json.get('model_id', 'standard')
+        
+        if not contract_text:
+            return jsonify({
+                'success': False,
+                'error': '契約書テキストが提供されていません'
+            }), 400
+        
+        result = {}
+        
+        if model_id == 'hybrid':
+            # ハイブリッドアナライザーを初期化
+            analyzer = HybridContractAnalyzer()
+            
+            # イベントループの問題を回避するための同期呼び出し
+            # テスト環境では既にイベントループが実行中の可能性があるため
+            try:
+                # まず同期的に実行を試みる
+                result = analyzer.analyze_contract(contract_text)
+            except RuntimeError as e:
+                if "This event loop is already running" in str(e):
+                    # イベントループが既に実行中の場合は直接非同期関数を実行
+                    from asyncio import new_event_loop, set_event_loop
+                    loop = new_event_loop()
+                    set_event_loop(loop)
+                    result = loop.run_until_complete(analyzer.analyze_contract_async(contract_text))
+                    loop.close()
+                else:
+                    raise e
+        else:
+            # 標準アナライザー（OpenAI）を初期化
+            analyzer = JapaneseContractAnalyzer()
+            
+            # イベントループの問題を回避するための同期呼び出し
+            try:
+                import asyncio
+                # 既存のイベントループがあるか確認
+                try:
+                    loop = asyncio.get_event_loop()
+                except RuntimeError:
+                    loop = asyncio.new_event_loop()
+                    asyncio.set_event_loop(loop)
+                
+                result = loop.run_until_complete(analyzer.analyze_contract_async(contract_text))
+            except RuntimeError as e:
+                if "This event loop is already running" in str(e):
+                    # テスト環境ではエラー防止のために別の方法で実行
+                    import nest_asyncio
+                    nest_asyncio.apply()
+                    loop = asyncio.get_event_loop()
+                    result = loop.run_until_complete(analyzer.analyze_contract_async(contract_text))
+                else:
+                    raise e
+        
+        # フロントエンド用に結果を整形
+        response = {
+            'success': True,
+            'model_id': model_id,
+            'risk_level': result.get('risk_level', 0),
+            'risk_score': round(result.get('risk_score', 0.0), 2),
+            'raw_data_content': result.get('raw_data_content', ''),
+            'problems': result.get('problems', []),
+            'risks': result.get('risks', []),
+            'summary': result.get('summary', ''),
+            'suggestions': result.get('suggestions', [])
+        }
+        
+        return jsonify(response)
+    
+    except Exception as e:
+        app.logger.error(f"契約書分析中にエラーが発生: {str(e)}", exc_info=True)
+        return jsonify({
+            'success': False,
+            'error': f"分析中にエラーが発生: {str(e)}"
+        }), 500
+
+
+@app.route('/api/model_info', methods=['GET'])
+def get_model_info():
+    """使用可能なモデル情報を取得する"""
+    try:
+        # 標準モデル(OpenAI)の情報
+        standard_model_info = {
+            'id': 'standard',
+            'name': '標準モデル (OpenAI)',
+            'description': 'OpenAI APIを使用した契約書分析モデル',
+            'type': 'api'
+        }
+        
+        # カスタムT5モデルの情報
+        custom_t5_model_info = {
+            'id': 'custom_t5',
+            'name': 'カスタムT5モデル',
+            'description': '独自データセットで学習したT5モデルによる契約書分析',
+            'type': 'local'
+        }
+        
+        # ハイブリッドモデルの情報
+        hybrid_model_info = {
+            'id': 'hybrid',
+            'name': 'ハイブリッドモデル',
+            'description': 'OpenAIとルールベース分析を組み合わせた高精度契約書分析',
+            'type': 'hybrid'
+        }
+        
+        return jsonify({
+            'success': True,
+            'models': [standard_model_info, custom_t5_model_info, hybrid_model_info]
+        })
+    
+    except Exception as e:
+        return jsonify({
+            'success': False,
+            'error': f"モデル情報取得中にエラーが発生しました: {str(e)}"
+        }), 500
+
 
 if __name__ == '__main__':
     import argparse

@@ -4,27 +4,70 @@ venv/
 __pycache__/
 *.pyo
 *.pyd
+.pytest_cache/
+*.so
+.coverage
+coverage.xml
+*.cover
 
-# Environment files
+# Environment variables and secrets
 .env
 *.env
+.env.*
+.flaskenv
+
+# API Keys and configs
+*config.json
+*secrets.json
+*credentials.json
 
 # ML Models and Data
 models/
-datasets/processed/
+*.pt
+*.pth
+*.h5
+*.pkl
+*.joblib
 
-# 特定のファイルを除外
+# データセット
+datasets/
+*.csv
+*.xlsx
+
+# 契約書フォルダ - 機密情報を含む可能性あり
+契約書系/
+uploads/
 !uploads/original_filenames.json
+downloads/
+temp/
 
 # IDE files
 .vscode/
 .idea/
+*.sublime-*
 
 # MacOS
 .DS_Store
+.AppleDouble
+.LSOverride
 
-# Logs
+# Logs and databases
 *.log
+*.sql
+*.sqlite3
+log/
+logs/
 
 # Jupyter Notebook
 .ipynb_checkpoints/
+
+# Distribution / packaging
+dist/
+build/
+*.egg-info/
+
+# Unit test / coverage reports
+htmlcov/
+.tox/
+nosetests.xml
+

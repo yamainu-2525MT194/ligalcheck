@@ -1,0 +1,10 @@
+Traceback (most recent call last):
+  File "/Users/yamamotoyuuki/Documents/windsurf_dev/legal_review_app/train_seq2seq_model.py", line 3, in <module>
+    from transformers import (
+  File "/Users/yamamotoyuuki/Documents/windsurf_dev/legal_review_app/venv/lib/python3.10/site-packages/transformers/__init__.py", line 27, in <module>
+    from . import dependency_versions_check
+  File "/Users/yamamotoyuuki/Documents/windsurf_dev/legal_review_app/venv/lib/python3.10/site-packages/transformers/dependency_versions_check.py", line 16, in <module>
+    from .utils.versions import require_version, require_version_core
+  File "/Users/yamamotoyuuki/Documents/windsurf_dev/legal_review_app/venv/lib/python3.10/site-packages/transformers/utils/__init__.py", line 19, in <module>
+    from huggingface_hub import get_full_repo_name  # for backward compatibility
+ModuleNotFoundError: No module named 'huggingface_hub'
